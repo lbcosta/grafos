@@ -1,0 +1,46 @@
+nodes
+arad,p,1.0
+zerind,p,1.0
+timisoara,p,1.0
+oradea,p,1.0
+sibiu,p,1.0
+fagaras,p,1.0
+rimmicu vilcea,p,1.0
+pitest,p,1.0
+craiova,p,1.0
+lugoj,p,1.0
+mehadia,p,1.0
+dobreta,p,1.0
+bucharest,p,1.0
+giurgiu,p,1.0
+timisoara,p,1.0
+urziceni,p,1.0
+hirsova,p,1.0
+eforie,p,1.0
+vaslui,p,1.0
+iasi,p,1.0
+neamt,p,1.0
+edges
+arad,118,timisoara,distance,118
+arad,140,sibiu,distance,140
+arad,75,zerind,distance,75
+zerind,71,oradea,distance,71
+oradea,151,sibiu,distance,151
+sibiu,80,rimmicu vilcea,distance,80
+sibiu,99,fagaras,distance,99
+rimmicu vilcea,146,craiova,distance,146
+rimmicu vilcea,97,pitest,distance,97
+pitest,101,bucharest,distance,101
+fagaras,211,bucharest,distance,211
+timisoara,111,lugoj,distance,111
+lugoj,70,mehadia,distance,70
+mehadia,75,dobreta,distance,75
+dobreta,120,craiova,distance,120
+craiova,138,pitest,distance,138
+bucharest,90,giurgiu,distance,90
+bucharest,85,urziceni,distance,85
+urziceni,98,hirsova,distance,98
+urziceni,142,vaslui,distance,142
+hirsova,86,eforie,distance,86
+vaslui,92,iasi,distance,92
+iasi,87,neamt,distance,87

@@ -23,14 +23,35 @@ public class TestLoad {
 			}
 		}
 
-		Node target = graph.buscaEmLargura(graph.getNode("arad"),graph.getNode("bucharest"));
-		while(target != null) {
-			System.out.println(target);
-			target = target.getParent();
+		System.out.println("\nBusca em Largura:");
+		Node targetLargura = graph.buscaEmLargura(graph.getNode("arad"),graph.getNode("bucharest"));
+		while(targetLargura != null) {
+			System.out.println(targetLargura);
+			targetLargura = targetLargura.getParent();
 		}
 
+		System.out.println("\nBusca em Profundidade:");
+		Node targetProfundidade = graph.buscaEmProfundidade(graph.getNode("arad"),graph.getNode("bucharest"));
+		while(targetProfundidade != null) {
+			System.out.println(targetProfundidade);
+			targetProfundidade = targetProfundidade.getParent();
+		}
 
-		
+		System.out.println("\nBCU:");
+		Node targetBCU = graph.buscaDeCustoUniforme(graph.getNode("sibiu"),graph.getNode("bucharest"));
+		while(targetBCU != null) {
+			System.out.println(targetBCU);
+			targetBCU = targetBCU.getParent();
+		}
+
+		System.out.println("\nDijkstra:");
+		Node targetDijkstra = graph.dijkstra(graph.getNode("arad"),graph.getNode("bucharest"));
+		while(targetDijkstra != null) {
+			System.out.print(targetDijkstra + " - ");
+			System.out.println(targetDijkstra.getG());
+			targetDijkstra = targetDijkstra.getParent();
+		}
+
 	}
 
 }

@@ -101,14 +101,107 @@ public class Graph {
 			} else {
 				List<Node> children = actual.getNeighbors();
 				for(Node child : children) {
-					Node childCopy = (Node) child.clone();
-					childCopy.setParent(actual);
-					queue.add(childCopy);
+					if(!child.equals(actual.getParent())) {
+						Node childCopy = (Node) child.clone();
+
+						childCopy.setParent(actual);
+						queue.add(childCopy);
+					}
 				}
 			}
 		}
 
 		return null;
 	}
+
+	public Node buscaEmProfundidade(Node source, Node target) throws CloneNotSupportedException {
+		Stack<Node> stack = new Stack<>();
+		stack.push(source);
+		while(! stack.isEmpty()) {
+			Node actual = stack.pop();
+			if(actual.equals(target)) {
+				return actual;
+			} else {
+				List<Node> children = actual.getNeighbors();
+				for(Node child : children) {
+					if(!child.equals(actual.getParent())) {
+						Node childCopy = (Node) child.clone();
+
+						childCopy.setParent(actual);
+						stack.add(childCopy);
+					}
+
+				}
+			}
+		}
+
+		return null;
+	}
+
+	public Node buscaDeCustoUniforme(Node source, Node target) throws CloneNotSupportedException {
+		ArrayList<Node> list = new ArrayList<>();
+		list.add(source);
+		while(! list.isEmpty()) {
+			Collections.sort(list);
+			Node actual = list.remove(0);
+			if(actual.equals(target)) {
+				return actual;
+			} else {
+				List<Node> children = actual.getNeighbors();
+				for(Node child : children) {
+					if(! child.equals(actual.getParent())) {
+						Node childCopy = (Node) child.clone();
+
+						childCopy.setParent(actual);
+
+						Edge edgeToParent = childCopy.getEdgeWith(actual);
+						childCopy.setG(childCopy.getG() + edgeToParent.getWeight());
+
+						list.add(childCopy);
+					}
+				}
+			}
+		}
+
+		return null;
+	}
+
+	public Node dijkstra(Node source, Node target) throws CloneNotSupportedException {
+		//1º PASSO: TODOS OS G's são INFINITOS, MENOS O DO NÓ INICIAL
+		for(Node node : this.getNodeList()) {
+			node.setG(Float.POSITIVE_INFINITY);
+		}
+		this.getNode(source.getId()).setG(Float.valueOf(0));
+
+		//2º PASSO: SUBCONJUNTO DE NÓS QUE AINDA NÃO TIVERAM SUAS ARESTAS RELAXADAS
+		List<Node> list = this.getNodeList();
+
+		//3º PASSO:
+		while(! list.isEmpty()) {
+			Collections.sort(list);
+			Node actual = list.remove(0);
+			if(actual.equals(target)) {
+				return actual;
+			} else {
+				List<Node> children = actual.getNeighbors();
+				for(Node child : children) {
+					Node childCopy = (Node) child.clone();
+
+					if(childCopy.getG() > actual.getG()) {
+						float weight = actual.getEdgeWith(childCopy).getWeight();
+						childCopy.setG(actual.getG() + weight);
+
+						childCopy.setParent(actual);
+
+						list.add(childCopy);
+					}
+				}
+			}
+		}
+
+		return null;
+	}
+
+
 	
 }

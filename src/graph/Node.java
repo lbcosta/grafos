@@ -33,6 +33,7 @@ public class Node implements Comparable<Node>, Cloneable{
 		super();
 		this.id = id;
 		this.weight = weight;
+		this.g = Float.valueOf(0);
 	}
 	
 	public Node(String id, Float weight, String label) {
@@ -40,6 +41,7 @@ public class Node implements Comparable<Node>, Cloneable{
 		this.id = id;
 		this.weight = weight;
 		this.label = label;
+		this.g = Float.valueOf(0);
 	}
 	
 	public String getId() {
@@ -213,8 +215,13 @@ public class Node implements Comparable<Node>, Cloneable{
 	}
 
 	@Override
-	public boolean equals(Object obj) {		
-		return this.id.equals(((Node)obj).getId());
+	public boolean equals(Object obj) {
+		if(obj != null) {
+			return this.id.equals(((Node)obj).getId());
+		} else {
+			return false;
+		}
+
 	}
 	
 	@Override

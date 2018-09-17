@@ -155,7 +155,7 @@ public class Graph {
 						childCopy.setParent(actual);
 
 						Edge edgeToParent = childCopy.getEdgeWith(actual);
-						childCopy.setG(childCopy.getG() + edgeToParent.getWeight());
+						childCopy.setG(actual.getG() + edgeToParent.getWeight());
 
 						list.add(childCopy);
 					}

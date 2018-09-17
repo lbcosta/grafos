@@ -40,7 +40,8 @@ public class TestLoad {
 		System.out.println("\nBCU:");
 		Node targetBCU = graph.buscaDeCustoUniforme(graph.getNode("sibiu"),graph.getNode("bucharest"));
 		while(targetBCU != null) {
-			System.out.println(targetBCU);
+			System.out.print(targetBCU + " - ");
+			System.out.println(targetBCU.getG());
 			targetBCU = targetBCU.getParent();
 		}
 

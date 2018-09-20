@@ -186,10 +186,11 @@ public class Graph {
 				List<Node> children = actual.getNeighbors();
 				for(Node child : children) {
 					Node childCopy = (Node) child.clone();
+					float weightToFather = actual.getEdgeWith(childCopy).getWeight();
 
-					if(childCopy.getG() > actual.getG()) {
-						float weight = actual.getEdgeWith(childCopy).getWeight();
-						childCopy.setG(actual.getG() + weight);
+					if(childCopy.getG() + weightToFather > actual.getG()) {
+
+						childCopy.setG(actual.getG() + weightToFather);
 
 						childCopy.setParent(actual);
 

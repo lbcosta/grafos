@@ -12,6 +12,14 @@ lugoj,p,1.0
 mehadia,p,1.0
 dobreta,p,1.0
 bucharest,p,1.0
+giurgiu,p,1.0
+timisoara,p,1.0
+urziceni,p,1.0
+hirsova,p,1.0
+eforie,p,1.0
+vaslui,p,1.0
+iasi,p,1.0
+neamt,p,1.0
 edges
 arad,118,timisoara,distance,118
 arad,140,sibiu,distance,140
@@ -29,3 +37,10 @@ lugoj,70,mehadia,distance,70
 mehadia,75,dobreta,distance,75
 dobreta,120,craiova,distance,120
 craiova,138,pitest,distance,138
+bucharest,90,giurgiu,distance,90
+bucharest,85,urziceni,distance,85
+urziceni,98,hirsova,distance,98
+urziceni,142,vaslui,distance,142
+hirsova,86,eforie,distance,86
+vaslui,92,iasi,distance,92
+iasi,87,neamt,distance,87

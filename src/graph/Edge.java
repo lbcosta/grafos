@@ -72,6 +72,9 @@ public class Edge implements Comparable<Edge>{
 			return false;
 		}
 	}
-	
-	
+
+	@Override
+	public String toString() {
+		return this.getSource()+"->"+this.getTarget();
+	}
 }

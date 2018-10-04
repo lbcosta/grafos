@@ -9,11 +9,25 @@ public class Graph {
 	protected HashMap<String, Node> nodeHash = new HashMap<String, Node>();
 	
 	protected List<Edge> edges = new ArrayList<Edge>();
+
+	public Graph(){
+
+    }
 	
 	public Graph(String datasetName) {
 		super();
 		this.dataSetName = datasetName;
 	}
+
+	public Node addNode(Node node) {
+        Node v = nodeHash.get(node.getId());
+
+        if(v == null){
+            this.nodeHash.put(node.getId(),node);
+        }
+
+        return v;
+    }
 
 	public Node addNode(String id, Float weight, String label){
 		
@@ -202,6 +216,53 @@ public class Graph {
 
 		return null;
 	}
+
+	public List<Edge> kruskal() {
+	    /*
+	    KRUSKAL(G):
+            1 A = ∅
+            2 foreach v ∈ G.V:
+            3    MAKE-SET(v)
+            4 foreach (u, v) in G.E ordered by weight(u, v), increasing:
+            5    if FIND-SET(u) ≠ FIND-SET(v):
+            6       A = A ∪ {(u, v)}
+            7       UNION(u, v)
+            8 return A
+	     */
+
+        List<Edge> MST = new ArrayList<>();
+        List<List<Node>> forest = new ArrayList<>();
+        for(Node graphNode : this.getNodeList()) {
+            List<Node> tree = new ArrayList<>();
+            tree.add(graphNode);
+            forest.add(tree);
+        }
+
+        //Lista de arestas do menor para maior peso.
+        List<Edge> possibleEdges = this.getEdges();
+        Collections.sort(possibleEdges);
+
+        for(Edge possibleEdge : possibleEdges) {
+            Node v1 = possibleEdge.getSource();
+            Node v2 = possibleEdge.getTarget();
+
+            for(List<Node> tree : forest) {
+                if(tree.contains(v1) ^ tree.contains(v2)) {
+                    MST.add(possibleEdge);
+
+                }
+            }
+
+
+        }
+
+
+
+
+
+	    return MST;
+	}
+
 
 
 	

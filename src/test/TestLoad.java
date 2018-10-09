@@ -56,6 +56,13 @@ public class TestLoad {
 		System.out.println("\nKruskal:");
 		System.out.println(graph.kruskal());
 
+		System.out.println("\nPrim:");
+		System.out.println(graph.prim());
+
+		/*
+		[lugoj->mehadia, zerind->oradea, arad->zerind, mehadia->dobreta, sibiu->rimmicu vilcea, rimmicu vilcea->pitest, sibiu->fagaras, pitest->bucharest, timisoara->lugoj, arad->timisoara, dobreta->craiova, craiova->pitest]
+		 */
+
 	}
 
 }

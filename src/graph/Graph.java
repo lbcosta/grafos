@@ -217,6 +217,10 @@ public class Graph {
 		return null;
 	}
 
+	public List<Edge> prim() {
+		return null;
+	}
+
 	public List<Edge> kruskal() {
 	    /*
 	    KRUSKAL(G):
@@ -230,37 +234,61 @@ public class Graph {
             8 return A
 	     */
 
-        List<Edge> MST = new ArrayList<>();
-        List<List<Node>> forest = new ArrayList<>();
-        for(Node graphNode : this.getNodeList()) {
-            List<Node> tree = new ArrayList<>();
-            tree.add(graphNode);
-            forest.add(tree);
-        }
+	    List<Edge> A = new ArrayList<>();
+	    List<Node> V = this.getNodeList();
+	    List<Edge> E = this.getEdges();
+	    List<List<Node>> subsets = new ArrayList<>();
 
-        //Lista de arestas do menor para maior peso.
-        List<Edge> possibleEdges = this.getEdges();
-        Collections.sort(possibleEdges);
+	    for(Node v : V) {
+	    	List<Node> subset = new ArrayList<>();
+	    	subset.add(v);
+	    	subsets.add(subset);
+		}
 
-        for(Edge possibleEdge : possibleEdges) {
-            Node v1 = possibleEdge.getSource();
-            Node v2 = possibleEdge.getTarget();
+		Collections.sort(E);
 
-            for(List<Node> tree : forest) {
-                if(tree.contains(v1) ^ tree.contains(v2)) {
-                    MST.add(possibleEdge);
-
-                }
-            }
-
-
-        }
+		for(Edge e : E) {
+			Node src = e.getSource();
+			Node tgt = e.getTarget();
+			if(! find(subsets,src).equals(find(subsets,tgt))) {
+				A.add(e);
+				union(subsets,src,tgt);
+			}
+		}
 
 
+	    return A;
+	}
 
+	private List<Node> find(List<List<Node>> subsets, Node v) {
+		for(List<Node> subset : subsets) {
+			for(Node node : subset) {
+				if(node.equals(v)) {
+					return subset;
+				}
+			}
+		}
 
+		return null;
+	}
 
-	    return MST;
+	private void union(List<List<Node>> subsets, Node v1, Node v2) {
+		int first = 0;
+		int second = 0;
+		for(List<Node> subset : subsets) {
+			for(Node node : subset) {
+				if(node.equals(v1)) {
+					first = subsets.indexOf(subset);
+					break;
+				}
+				if(node.equals(v2)) {
+					second = subsets.indexOf(subset);
+				}
+			}
+		}
+
+		subsets.get(first).addAll(subsets.get(second));
+		subsets.remove(second);
 	}
 
 

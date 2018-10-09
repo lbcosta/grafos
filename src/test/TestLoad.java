@@ -1,5 +1,6 @@
 package test;
 
+import java.util.Collections;
 import java.util.List;
 
 import graph.Graph;

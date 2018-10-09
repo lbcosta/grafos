@@ -217,9 +217,65 @@ public class Graph {
 		return null;
 	}
 
-	public List<Edge> prim() {
-		return null;
+	private Edge bestEdge(Node v) {
+		List<Node> neighbors = v.getNeighbors();
+		List<Edge> edgesToNeighbors = new ArrayList<>();
+		for(Node neighbor : neighbors) {
+			edgesToNeighbors.add(v.getEdgeWith(neighbor));
+		}
+		Collections.sort(edgesToNeighbors);
+		return edgesToNeighbors.get(0);
 	}
+
+	public List<Edge> prim() {
+		List<Edge> A = new ArrayList<>();
+//		List<List<Node>> subsets = new ArrayList<>();
+//		List<Node> V = this.getNodeList();
+//
+//
+//		for(Node v : V) {
+//			List<Node> subset = new ArrayList<>();
+//			subset.add(v);
+//			subsets.add(subset);
+//		}
+//
+//		while (A.size() < V.size() - 1) {
+//
+//		}
+
+
+
+
+
+		return A;
+	}
+
+//	private Edge bestEdge(List<Node> subset) {
+//	    Edge bestEdge = null;
+//
+//	    for(Node v : subset) {
+//
+//        }
+//    }
+
+	public List<Edge> boruvka() {
+	    /*
+	        BORUVKA(G):
+	            A = ∅
+	            foreach v ∈ G.V:
+	                MAKE-SET(v)
+	            foreach v ∈ G.V:
+	                e = min(u, v)
+	                if FIND-SET(u) ≠ FIND-SET(v):
+	                    A = A ∪ e
+	                    UNION(u, v)
+
+
+	     */
+
+
+	    return null;
+    }
 
 	public List<Edge> kruskal() {
 	    /*

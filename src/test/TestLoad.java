@@ -54,8 +54,8 @@ public class TestLoad {
 //			targetDijkstra = targetDijkstra.getParent();
 //		}
 
-		System.out.println("\nKruskal:");
-		System.out.println(graph.kruskal());
+//		System.out.println("\nKruskal:");
+//		System.out.println(graph.kruskal());
 
 		System.out.println("\nPrim:");
 		System.out.println(graph.prim());

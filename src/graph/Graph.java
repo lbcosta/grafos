@@ -217,46 +217,46 @@ public class Graph {
 		return null;
 	}
 
-	private Edge bestEdge(Node v) {
-		List<Node> neighbors = v.getNeighbors();
-		List<Edge> edgesToNeighbors = new ArrayList<>();
-		for(Node neighbor : neighbors) {
-			edgesToNeighbors.add(v.getEdgeWith(neighbor));
+	public List<Edge> prim(){
+
+		List<Edge> A = new ArrayList<>(); //Conjunto de arestas da MST
+		List<Node> U = new ArrayList<>(); //Conjunto de nós da MST
+
+		List<Node> V = this.getNodeList(); //Conjunto de nós existentes no grafo
+
+		U.add(V.get(0)); //Começa a MST de qualquer nó do graph
+
+
+		while(A.size() < V.size() - 1) {
+			List<Edge> subsetNeighborsEdges = new ArrayList<>(); //Caminhos possiveis da MST em formação
+
+			//Lista todos os vizinhos possíveis do subconjunto:
+			for(Node u : U) {
+				List<Edge> edgesToNeighbor =  u.getEdges();
+				for(Edge e : edgesToNeighbor) {
+					if(! A.contains(e)) {			//Só são (quase) seguras, arestas externas ao subconjunto
+						subsetNeighborsEdges.add(e);
+					}
+				}
+			}
+
+			Edge menor = Collections.min(subsetNeighborsEdges); //Pega aresta de menor peso
+			//Se os dois nós ligados pela aresta já não fizerem parte do subconjunto, ela é segura
+			if(! (U.contains(menor.getSource()) && U.contains(menor.getTarget())) ) {
+				A.add(menor);
+			}
+
+			//Se o subconjunto tiver o src, adiciona o tgt e vice e versa.
+			if(U.contains(menor.getSource())) {
+				U.add(menor.getTarget());
+			} else {
+				U.add(menor.getSource());
+			}
 		}
-		Collections.sort(edgesToNeighbors);
-		return edgesToNeighbors.get(0);
-	}
-
-	public List<Edge> prim() {
-		List<Edge> A = new ArrayList<>();
-//		List<List<Node>> subsets = new ArrayList<>();
-//		List<Node> V = this.getNodeList();
-//
-//
-//		for(Node v : V) {
-//			List<Node> subset = new ArrayList<>();
-//			subset.add(v);
-//			subsets.add(subset);
-//		}
-//
-//		while (A.size() < V.size() - 1) {
-//
-//		}
-
-
-
 
 
 		return A;
 	}
-
-//	private Edge bestEdge(List<Node> subset) {
-//	    Edge bestEdge = null;
-//
-//	    for(Node v : subset) {
-//
-//        }
-//    }
 
 	public List<Edge> boruvka() {
 	    /*

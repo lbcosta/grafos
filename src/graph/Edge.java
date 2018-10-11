@@ -55,6 +55,10 @@ public class Edge implements Comparable<Edge>{
 		this.otherAttributes = otherAttributes;
 	}
 
+	public Node opposite(Node origin) {
+		return origin.equals(source) ? target : source;
+	}
+
 	@Override
 	public int compareTo(Edge o) {
 		return getWeight().compareTo(o.getWeight());

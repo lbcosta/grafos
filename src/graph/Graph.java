@@ -219,63 +219,38 @@ public class Graph {
 
 	public List<Edge> prim(){
 
-		List<Edge> A = new ArrayList<>(); //Conjunto de arestas da MST
-		List<Node> U = new ArrayList<>(); //Conjunto de nós da MST
+		List<Edge> MSTEdges = new ArrayList<>(); //Conjunto de arestas da MST
+		List<Node> MSTNodes = new ArrayList<>(); //Conjunto de nós da MST
 
-		List<Node> V = this.getNodeList(); //Conjunto de nós existentes no grafo
+		List<Node> graphNodes = this.getNodeList(); //Todos os nós do grafo
 
-		U.add(V.get(0)); //Começa a MST de qualquer nó do graph
+		MSTNodes.add(graphNodes.get(0)); //Começa a MST de qualquer nó do grafo
 
 
-		while(A.size() < V.size() - 1) {
-			List<Edge> subsetNeighborsEdges = new ArrayList<>(); //Caminhos possiveis da MST em formação
+		while(MSTEdges.size() < graphNodes.size() - 1) { //Algoritmo para quando Nº de arestas do MST for igual ao Nº de nós do grafo menos 1
 
-			//Lista todos os vizinhos possíveis do subconjunto:
-			for(Node u : U) {
-				List<Edge> edgesToNeighbor =  u.getEdges();
-				for(Edge e : edgesToNeighbor) {
-					if(! A.contains(e)) {			//Só são (quase) seguras, arestas externas ao subconjunto
-						subsetNeighborsEdges.add(e);
-					}
-				}
+		    //Pega todas as arestas que não fazem parte da MST
+		    List<Edge> subsetNeighborsEdges = getPossibleEdges(MSTEdges, MSTNodes);
+
+            //Pega aresta de menor peso
+            Edge menor = Collections.min(subsetNeighborsEdges);
+
+			//Se os dois nós ligados pela aresta não fizerem parte do subconjunto, ela é segura
+			if(! (MSTNodes.contains(menor.getSource()) && MSTNodes.contains(menor.getTarget())) ) {
+				MSTEdges.add(menor);
 			}
 
-			Edge menor = Collections.min(subsetNeighborsEdges); //Pega aresta de menor peso
-			//Se os dois nós ligados pela aresta já não fizerem parte do subconjunto, ela é segura
-			if(! (U.contains(menor.getSource()) && U.contains(menor.getTarget())) ) {
-				A.add(menor);
-			}
-
-			//Se o subconjunto tiver o src, adiciona o tgt e vice e versa.
-			if(U.contains(menor.getSource())) {
-				U.add(menor.getTarget());
+			//Se o subconjunto tiver o source, adiciona o target a ele e vice e versa.
+			if(MSTNodes.contains(menor.getSource())) {
+				MSTNodes.add(menor.getTarget());
 			} else {
-				U.add(menor.getSource());
+				MSTNodes.add(menor.getSource());
 			}
 		}
 
 
-		return A;
+		return MSTEdges;
 	}
-
-	public List<Edge> boruvka() {
-	    /*
-	        BORUVKA(G):
-	            A = ∅
-	            foreach v ∈ G.V:
-	                MAKE-SET(v)
-	            foreach v ∈ G.V:
-	                e = min(u, v)
-	                if FIND-SET(u) ≠ FIND-SET(v):
-	                    A = A ∪ e
-	                    UNION(u, v)
-
-
-	     */
-
-
-	    return null;
-    }
 
 	public List<Edge> kruskal() {
 	    /*
@@ -290,33 +265,96 @@ public class Graph {
             8 return A
 	     */
 
-	    List<Edge> A = new ArrayList<>();
-	    List<Node> V = this.getNodeList();
-	    List<Edge> E = this.getEdges();
+	    List<Edge> MSTEdges = new ArrayList<>();
+	    List<Node> graphNodes = this.getNodeList();
+	    List<Edge> graphEdges = this.getEdges();
+
 	    List<List<Node>> subsets = new ArrayList<>();
+        fillSubsets(graphNodes, subsets); //Um subset para cada nó
 
-	    for(Node v : V) {
-	    	List<Node> subset = new ArrayList<>();
-	    	subset.add(v);
-	    	subsets.add(subset);
-		}
+        Collections.sort(graphEdges); //Organiza arestas do menor peso para maior peso
 
-		Collections.sort(E);
-
-		for(Edge e : E) {
+		for(Edge e : graphEdges) {
 			Node src = e.getSource();
 			Node tgt = e.getTarget();
-			if(! find(subsets,src).equals(find(subsets,tgt))) {
-				A.add(e);
+			if(! find(subsets,src).equals(find(subsets,tgt))) { //Se não pertecem ao mesmo subset, a aresa é válida
+				MSTEdges.add(e);
 				union(subsets,src,tgt);
 			}
 		}
 
 
-	    return A;
+	    return MSTEdges;
 	}
 
-	private List<Node> find(List<List<Node>> subsets, Node v) {
+    public List<Edge> boruvka() {
+	    List<Node> graphNodes = this.getNodeList(); //Nós do grafo
+	    List<Edge> MSTEdges = new ArrayList<>();  //Arestas da MST
+
+        List<List<Node>> subsets = new ArrayList<>();
+        fillSubsets(graphNodes, subsets); //Um subset para cada nó
+
+        for(Node v : graphNodes) { //Fase 1 - Para cada vertice:
+            List<Edge> edges = v.getEdges(); //Pega todas as arestas do vertice
+            Edge menor = Collections.min(edges); //Pega a menor de menor peso
+            if(! MSTEdges.contains(menor)) { //Se ainda não está na MST, adiciona e une os subsets
+                MSTEdges.add(menor);
+                union(subsets,v,menor.opposite(v));
+            }
+        }
+
+        while(MSTEdges.size() < graphNodes.size() - 1) { //Fase 2 - Para cada subset:
+            Edge menor = getSafeEdge(subsets,MSTEdges); //Pega a menor aresta válida (Que não pertence a MST e não une nós de um mesmo subset)
+
+            union(subsets, menor.getSource(), menor.getTarget()); //Une os grupos das duas pontas da menor aresta válida
+            MSTEdges.add(menor); //Adiciona a aresta a MST
+        }
+
+
+        return MSTEdges;
+    }
+
+    private Edge getSafeEdge(List<List<Node>> subsets, List<Edge> A) {
+        List<Node> subset = subsets.get(0);
+
+        List<Edge> E = new ArrayList<>();
+
+        for(Node v : subset) {
+            List<Edge> possibleEdges = v.getEdges();
+            for(Edge e : possibleEdges) {
+                boolean pertecemAoMesmoGrupo =  find(subsets, e.getSource()).equals(find(subsets, e.getTarget()));
+                if(! (A.contains(e) && pertecemAoMesmoGrupo)) {
+                    E.add(e);
+                }
+            }
+        }
+
+        return Collections.min(E);
+    }
+
+    private List<Edge> getPossibleEdges(List<Edge> A, List<Node> subset) {
+        List<Edge> possibleEdges = new ArrayList<>();
+	    for(Node v : subset) {
+            List<Edge> E = v.getEdges();
+            for(Edge e : E) {
+                if(! A.contains(e)) {
+                    possibleEdges.add(e);
+                }
+            }
+        }
+
+        return possibleEdges;
+    }
+
+    private void fillSubsets(List<Node> graphNodes, List<List<Node>> subsets) {
+        for (Node v : graphNodes) {
+            List<Node> subset = new ArrayList<>();
+            subset.add(v);
+            subsets.add(subset);
+        }
+    }
+
+    private List<Node> find(List<List<Node>> subsets, Node v) {
 		for(List<Node> subset : subsets) {
 			for(Node node : subset) {
 				if(node.equals(v)) {

@@ -11,7 +11,7 @@ public class TestLoad {
 	
 	public static void main(String[] args) throws Exception {
 		
-		Graph graph = Import.loadGraph("caxeiro");
+		Graph graph = Import.loadGraph("testeFF");
 		
 		List<Node> nodes = graph.getNodeList();
 		
@@ -23,7 +23,6 @@ public class TestLoad {
 
 			}
 		}
-
 //		System.out.println("\nBusca em Largura:");
 //		Node targetLargura = graph.buscaEmLargura(graph.getNode("arad"),graph.getNode("bucharest"));
 //		while(targetLargura != null) {
@@ -60,13 +59,16 @@ public class TestLoad {
 //		System.out.println("\nPrim:");
 //		System.out.println(graph.prim());
 
-		System.out.println("\nBoruvka:");
-		System.out.println(graph.boruvka());
+//		System.out.println("\nBoruvka:");
+//		System.out.println(graph.boruvka());
 
 		/*
 		[lugoj->mehadia, zerind->oradea, arad->zerind, mehadia->dobreta, sibiu->rimmicu vilcea, rimmicu vilcea->pitest, sibiu->fagaras, pitest->bucharest, timisoara->lugoj, arad->timisoara, dobreta->craiova, craiova->pitest]
 		 */
 
+
+		System.out.println("\nFord-Fulkerson");
+//		System.out.println(graph.fordFulkerson(graph.getNode("a"), graph.getNode("e")));
 	}
 
 }

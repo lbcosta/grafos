@@ -1,0 +1,17 @@
+nodes
+s,p,1.0
+v,p,1.0
+w,p,1.0
+u,p,1.0
+t,p,1.0
+z,p,1.0
+edges
+s,0,v,flow,0,capacity,6
+s,0,u,flow,0,capacity,5
+v,0,t,flow,0,capacity,3
+v,0,w,flow,0,capacity,1
+w,0,t,flow,0,capacity,7
+w,0,z,flow,0,capacity,9
+u,0,w,flow,0,capacity,1
+u,0,z,flow,0,capacity,2
+z,0,t,flow,0,capacity,5

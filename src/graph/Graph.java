@@ -1,5 +1,6 @@
 package graph;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 public class Graph {
@@ -314,6 +315,13 @@ public class Graph {
         return MSTEdges;
     }
 
+    public void fordFulkerson(Node source, Node target) throws CloneNotSupportedException {
+		for(Edge edge : this.getEdges()) {
+			System.out.println(edge.getOtherAttributes());
+		}
+
+	}
+
     private Edge getSafeEdge(List<List<Node>> subsets, List<Edge> A) {
         List<Node> subset = subsets.get(0);
 
@@ -385,7 +393,4 @@ public class Graph {
 		subsets.remove(second);
 	}
 
-
-
-	
 }

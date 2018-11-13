@@ -1,5 +1,7 @@
 package graph;
 
+import com.sun.jdi.IntegerType;
+
 import java.lang.reflect.Array;
 import java.util.*;
 
@@ -57,6 +59,10 @@ public class Graph {
 		
 		return a;
 		
+	}
+
+	public void addEdge(Edge edge) {
+		this.edges.add(edge);
 	}
 	
 	public Integer size(){
@@ -315,11 +321,109 @@ public class Graph {
         return MSTEdges;
     }
 
-    public void fordFulkerson(Node source, Node target) throws CloneNotSupportedException {
-		for(Edge edge : this.getEdges()) {
-			System.out.println(edge.getOtherAttributes());
+    public float fordFulkerson(Node source, Node target) throws CloneNotSupportedException {
+		float maxFlow = 0;
+		this.setResidualGraph();
+		ArrayList<Edge> path = this.getPath(source,target);
+		while(path != null) {
+			float minResidualCapacity = this.minResidualCapacity(path);
+			maxFlow += minResidualCapacity;
+			for(Edge edge : path) {
+				if(edge.isBackward) {
+					edge.setWeight(edge.getWeight() + minResidualCapacity);
+				} else {
+					edge.setWeight(edge.getWeight() - minResidualCapacity);
+					edge.setFlow(String.valueOf(minResidualCapacity + edge.getFlow()));
+					if(edge.getSource().isTargetOf(edge.getTarget())) {
+						Edge backward = edge.getTarget().getEdgeWith(edge.getSource());
+						backward.setWeight(backward.getWeight() + minResidualCapacity);
+					} else {
+						Edge backward = new Edge(edge.getTarget(),edge.getSource(),edge.getFlow());
+						backward.isBackward = true;
+						this.addEdge(backward);
+					}
+				}
+			}
+
+			for(Edge edge : path) {
+				System.out.println(edge + " - " + edge.getOtherAttributes());
+			}
+			System.out.println("Flow: " + maxFlow);
+			System.out.println("\n-----");
+
+
+			path = this.getPath(source,target);
 		}
 
+
+		return maxFlow;
+	}
+
+	private void setResidualGraph() {
+		for(Edge edge : this.getEdges()) {
+			edge.setWeight(
+					Float.valueOf((String) edge.getOtherAttributes().get("capacity"))
+							- Float.valueOf((String) edge.getOtherAttributes().get("flow"))
+			);
+		}
+	}
+
+	private ArrayList<Edge> getPath(Node source, Node target) throws CloneNotSupportedException {
+		ArrayList<Edge> pathEdges = new ArrayList<>();
+
+		//Faz uma busca em largura:
+		Stack<Node> stack = new Stack<>();
+		Node actual = null;
+		stack.push(source);
+		while(! stack.isEmpty()) {
+			actual = stack.pop();
+			if(actual.equals(target)) {
+				break;
+			} else {
+				List<Node> children = actual.getNeighborsOut();
+				for(Node child : children) {
+					Edge edgeToChild = actual.getEdgeWith(child);
+					boolean edgeIsValid = edgeToChild.isBackward ?
+							edgeToChild.getWeight() > 0
+							: edgeToChild.getResidualCapacity() > 0;
+					if(!child.equals(actual.getParent()) && edgeIsValid) {
+						Node childCopy = (Node) child.clone();
+						childCopy.setParent(actual);
+						stack.add(childCopy);
+					}
+
+				}
+			}
+		}
+		while(! actual.equals(source)) {
+			Node parent = actual.getParent();
+			pathEdges.add(parent.getEdgeWith(actual));
+			actual = actual.getParent();
+		}
+		Collections.reverse(pathEdges);
+
+
+		return this.isTargetReached(pathEdges, target) ? pathEdges : null;
+	}
+
+	private boolean isTargetReached(ArrayList<Edge> pathEdges, Node target) {
+		boolean isReached = false;
+
+		for(Edge edge : pathEdges) {
+			isReached = (edge.getTarget().equals(target));
+		}
+
+		return isReached;
+	}
+
+	private float minResidualCapacity(List<Edge> path) {
+		float minResidualCapacity = Float.POSITIVE_INFINITY;
+		for(Edge edge : path) {
+			if(edge.getWeight() < minResidualCapacity) {
+				minResidualCapacity = edge.getWeight();
+			}
+		}
+		return minResidualCapacity;
 	}
 
     private Edge getSafeEdge(List<List<Node>> subsets, List<Edge> A) {

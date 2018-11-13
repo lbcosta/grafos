@@ -184,14 +184,24 @@ public class Node implements Comparable<Node>, Cloneable{
 		return false;
 	}
 	
-	public Edge isTargetOf(Node neighbor){
+//	public Edge isTargetOf(Node neighbor){
+//		for (Edge a : edges) {
+//			if(a.getSource().getId().equals(neighbor.getId()) && a.getTarget().getId().equals(this.getId())){
+//				return a;
+//			}
+//		}
+//
+//		return null;
+//	}
+
+	public boolean isTargetOf(Node neighbor){
 		for (Edge a : edges) {
 			if(a.getSource().getId().equals(neighbor.getId()) && a.getTarget().getId().equals(this.getId())){
-				return a;
+				return true;
 			}
 		}
-		
-		return null;
+
+		return false;
 	}
 	
 	public Edge getEdgeWith(Node neighbor){

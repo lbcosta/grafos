@@ -12,8 +12,10 @@ public class Edge implements Comparable<Edge>{
 	
 	private HashMap<String, Object> otherAttributes = new HashMap<String, Object>();
 
+	public boolean isBackward;
+
 	public Edge(){
-		
+		this.isBackward = false;
 	}
 	
 	public Edge(Node source, Node target, Float weight) {
@@ -21,6 +23,7 @@ public class Edge implements Comparable<Edge>{
 		this.source = source;
 		this.target = target;
 		this.weight = weight;
+		this.isBackward = false;
 	}
 
 	public Node getSource() {
@@ -54,6 +57,21 @@ public class Edge implements Comparable<Edge>{
 	public void setOtherAttributes(HashMap<String, Object> otherAttributes) {
 		this.otherAttributes = otherAttributes;
 	}
+
+	public float getResidualCapacity() {
+		float capacity = Float.valueOf((String) this.otherAttributes.get("capacity"));
+		float flow = Float.valueOf((String) this.getOtherAttributes().get("flow"));
+		return capacity - flow;
+	}
+
+	public float getFlow() {
+		return Float.valueOf((String) this.otherAttributes.get("flow"));
+	}
+
+	public void setFlow(String flow) {
+		this.otherAttributes.put("flow", flow);
+	}
+
 
 	public Node opposite(Node origin) {
 		return origin.equals(source) ? target : source;

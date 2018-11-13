@@ -1,0 +1,13 @@
+nodes
+a,p,1.0
+b,p,1.0
+c,p,1.0
+d,p,1.0
+e,p,1.0
+edges
+a,2,b,distance,2
+a,1,c,distance,1
+b,3,c,distance,3
+c,5,d,distance,5
+c,4,e,distance,4
+d,6,e,distance,6

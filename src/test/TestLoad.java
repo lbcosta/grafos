@@ -11,7 +11,7 @@ public class TestLoad {
 	
 	public static void main(String[] args) throws Exception {
 		
-		Graph graph = Import.loadGraph("testeFF");
+		Graph graph = Import.loadGraph("testeFF2");
 		
 		List<Node> nodes = graph.getNodeList();
 		
@@ -24,7 +24,7 @@ public class TestLoad {
 			}
 		}
 //		System.out.println("\nBusca em Largura:");
-//		Node targetLargura = graph.buscaEmLargura(graph.getNode("arad"),graph.getNode("bucharest"));
+//		Node targetLargura = graph.buscaEmLargura(graph.getNode("s"),graph.getNode("t"));
 //		while(targetLargura != null) {
 //			System.out.println(targetLargura);
 //			targetLargura = targetLargura.getParent();
@@ -68,7 +68,7 @@ public class TestLoad {
 
 
 		System.out.println("\nFord-Fulkerson");
-//		System.out.println(graph.fordFulkerson(graph.getNode("a"), graph.getNode("e")));
+		System.out.println(graph.fordFulkerson(graph.getNode("S"), graph.getNode("T")));
 	}
 
 }

@@ -8,6 +8,7 @@ z,p,1.0
 edges
 s,0,v,flow,0,capacity,6
 s,0,u,flow,0,capacity,5
+s,0,w,flow,0,capacity,3
 v,0,t,flow,0,capacity,3
 v,0,w,flow,0,capacity,1
 w,0,t,flow,0,capacity,7

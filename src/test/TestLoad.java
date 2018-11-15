@@ -14,7 +14,7 @@ public class TestLoad {
 		Graph graph = Import.loadGraph("testeFF2");
 		
 		List<Node> nodes = graph.getNodeList();
-		
+		System.out.print("Nodes: ");
 		for (Node node : nodes) {
 			if(nodes.indexOf(node) == nodes.size() - 1) {
 				System.out.println(node.getId());
@@ -68,7 +68,7 @@ public class TestLoad {
 
 
 		System.out.println("\nFord-Fulkerson");
-		System.out.println(graph.fordFulkerson(graph.getNode("S"), graph.getNode("T")));
+		System.out.println("Fluxo Máximo: " + graph.fordFulkerson(graph.getNode("S"), graph.getNode("T"), true));
 	}
 
 }

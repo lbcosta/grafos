@@ -1,8 +1,4 @@
 package graph;
-
-import com.sun.jdi.IntegerType;
-
-import java.lang.reflect.Array;
 import java.util.*;
 
 public class Graph {
@@ -321,42 +317,47 @@ public class Graph {
         return MSTEdges;
     }
 
-    public float fordFulkerson(Node source, Node target) throws CloneNotSupportedException {
+    public float fordFulkerson(Node source, Node target, boolean showSteps) throws CloneNotSupportedException {
 		float maxFlow = 0;
 		this.setResidualGraph();
 		ArrayList<Edge> path = this.getPath(source,target);
-		while(path != null) {
-			float minResidualCapacity = this.minResidualCapacity(path);
-			maxFlow += minResidualCapacity;
-			for(Edge edge : path) {
+		return fordFulkersonRecursion(source, target, showSteps, maxFlow, path);
+	}
+
+	public float fordFulkersonRecursion(Node source, Node target, boolean showSteps, float maxFlow, ArrayList<Edge> path) throws CloneNotSupportedException{
+		if(path == null) {
+			return maxFlow;
+		} else {
+			float minResidualCapacity = this.minResidualCapacity(path); 	//Pega a menor capacidade residual daquele caminho
+			for(Edge edge : path) {											//Muda o fluxo de cada uma das arestas
 				if(edge.isBackward) {
-					edge.setWeight(edge.getWeight() + minResidualCapacity);
+					edge.increaseWeight(minResidualCapacity);				//Se for aresta de retorno, ela ganha delta (diminui fluxo)
 				} else {
-					edge.setWeight(edge.getWeight() - minResidualCapacity);
-					edge.setFlow(String.valueOf(minResidualCapacity + edge.getFlow()));
-					if(edge.getSource().isTargetOf(edge.getTarget())) {
-						Edge backward = edge.getTarget().getEdgeWith(edge.getSource());
-						backward.setWeight(backward.getWeight() + minResidualCapacity);
+					edge.decreaseWeight(minResidualCapacity);				//Se for aresta normal, ela perde delta (aumenta fluxo)
+					edge.setFlow(minResidualCapacity + edge.getFlow());		//Ajustando o atributo de fluxo
+					boolean edgeHaveBackward = edge.getSource().isTargetOf(edge.getTarget()); //Checa se a aresta possui um par de retorno
+					if(edgeHaveBackward) {
+						Edge backward = edge.getTarget().getEdgeWith(edge.getSource()); //Se possuir,ajusta o fluxo dele
+						backward.increaseWeight(minResidualCapacity);
 					} else {
-						Edge backward = new Edge(edge.getTarget(),edge.getSource(),edge.getFlow());
+						Edge backward = new Edge(edge.getTarget(),edge.getSource(),edge.getFlow()); //Se não, cria um.
 						backward.isBackward = true;
 						this.addEdge(backward);
 					}
 				}
 			}
+			maxFlow += minResidualCapacity;	//Aumenta o fluxo total pela capacidade residual
 
-			for(Edge edge : path) {
-				System.out.println(edge + " - " + edge.getOtherAttributes());
+			if(showSteps) { //Mostra os fluxos nas arestas e os caminhos que o algoritmo andou
+				for(Edge edge : path) {
+					System.out.println(edge + " - " + edge.getOtherAttributes());
+				}
+				System.out.println("Total Flow: " + maxFlow);
+				System.out.println("\n-----");
 			}
-			System.out.println("Flow: " + maxFlow);
-			System.out.println("\n-----");
 
-
-			path = this.getPath(source,target);
+			return fordFulkersonRecursion(source, target, showSteps, maxFlow, this.getPath(source,target)); //Procura proximo caminho
 		}
-
-
-		return maxFlow;
 	}
 
 	private void setResidualGraph() {
@@ -395,6 +396,7 @@ public class Graph {
 				}
 			}
 		}
+		//Coloca o caminho em uma lista
 		while(! actual.equals(source)) {
 			Node parent = actual.getParent();
 			pathEdges.add(parent.getEdgeWith(actual));
@@ -402,7 +404,7 @@ public class Graph {
 		}
 		Collections.reverse(pathEdges);
 
-
+		//O caminho so eh valido se chegou no sumidouro
 		return this.isTargetReached(pathEdges, target) ? pathEdges : null;
 	}
 
@@ -498,3 +500,42 @@ public class Graph {
 	}
 
 }
+
+//Ford-Fulkerson sem recursão:
+//    public float fordFulkerson(Node source, Node target) throws CloneNotSupportedException {
+//		float maxFlow = 0;
+//		this.setResidualGraph();
+//		ArrayList<Edge> path = this.getPath(source,target);
+//		while(path != null) {
+//			float minResidualCapacity = this.minResidualCapacity(path);
+//			maxFlow += minResidualCapacity;
+//			for(Edge edge : path) {
+//				if(edge.isBackward) {
+//					edge.setWeight(edge.getWeight() + minResidualCapacity);
+//				} else {
+//					edge.setWeight(edge.getWeight() - minResidualCapacity);
+//					edge.setFlow(String.valueOf(minResidualCapacity + edge.getFlow()));
+//					if(edge.getSource().isTargetOf(edge.getTarget())) {
+//						Edge backward = edge.getTarget().getEdgeWith(edge.getSource());
+//						backward.setWeight(backward.getWeight() + minResidualCapacity);
+//					} else {
+//						Edge backward = new Edge(edge.getTarget(),edge.getSource(),edge.getFlow());
+//						backward.isBackward = true;
+//						this.addEdge(backward);
+//					}
+//				}
+//			}
+//
+//			for(Edge edge : path) {
+//				System.out.println(edge + " - " + edge.getOtherAttributes());
+//			}
+//			System.out.println("Total Flow: " + maxFlow);
+//			System.out.println("\n-----");
+//
+//
+//			path = this.getPath(source,target);
+//		}
+//
+//
+//		return maxFlow;
+//	}

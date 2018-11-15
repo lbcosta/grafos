@@ -50,6 +50,14 @@ public class Edge implements Comparable<Edge>{
 		this.weight = weight;
 	}
 
+	public void increaseWeight(float value) {
+		this.weight += value;
+	}
+
+	public  void decreaseWeight(float value) {
+		this.weight -= value;
+	}
+
 	public HashMap<String, Object> getOtherAttributes() {
 		return otherAttributes;
 	}
@@ -68,8 +76,8 @@ public class Edge implements Comparable<Edge>{
 		return Float.valueOf((String) this.otherAttributes.get("flow"));
 	}
 
-	public void setFlow(String flow) {
-		this.otherAttributes.put("flow", flow);
+	public void setFlow(float flow) {
+		this.otherAttributes.put("flow", String.valueOf(flow));
 	}
 
 

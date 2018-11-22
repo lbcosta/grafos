@@ -220,6 +220,21 @@ public class Graph {
 		return null;
 	}
 
+	public boolean isStronglyConnected() throws CloneNotSupportedException {
+		for(Node src : this.getNodeList()) {
+			for(Node tgt : this.getNodeList()) {
+				if(!src.equals(tgt)) {
+					Node dijkstraTarget = this.dijkstra(src,tgt);
+					if(tgt.equals(dijkstraTarget)) {
+						return false;
+					}
+				}
+			}
+		}
+		return true;
+	}
+
+
 	public List<Edge> prim(){
 
 		List<Edge> MSTEdges = new ArrayList<>(); //Conjunto de arestas da MST
@@ -286,7 +301,7 @@ public class Graph {
 			}
 		}
 
-
+		System.out.println("Número de Componentes conexos: " + subsets.size());
 	    return MSTEdges;
 	}
 

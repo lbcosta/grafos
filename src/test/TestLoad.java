@@ -67,8 +67,14 @@ public class TestLoad {
 		 */
 
 
-		System.out.println("\nFord-Fulkerson");
-		System.out.println("Fluxo Máximo: " + graph.fordFulkerson(graph.getNode("S"), graph.getNode("T"), true));
+//		System.out.println("\nFord-Fulkerson");
+//		System.out.println("Fluxo Máximo: " + graph.fordFulkerson(graph.getNode("S"), graph.getNode("T"), true));
+
+		System.out.println("1 e 3) Há quantos componentes conexos? (Se houver um, o grafo é conectado)");
+		graph.kruskal();
+
+		System.out.println("2) O grafo é fortemente conectado?");
+		System.out.println(graph.isStronglyConnected() ? "Sim" : "Não");
 	}
 
 }
